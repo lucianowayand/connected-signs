@@ -44,3 +44,22 @@ Community Documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarte
 LexManos' Install Video: https://youtu.be/8VEdtQLuLO0
 Forge Forums: https://forums.minecraftforge.net/
 Forge Discord: https://discord.minecraftforge.net/
+
+---
+
+Project: Bigger Signs
+- Mod id: bigger_signs
+- Author: lucianowayand
+- License: MIT (see LICENSE.txt)
+
+Quick start (dev):
+1. Prepare the workspace and dependencies:
+```
+./gradlew --refresh-dependencies
+```
+2. Run the client in userdev:
+```
+./gradlew runClient
+```
+
+See `docs/SIGN_CONNECT_IDEAS.md` for the initial design notes.
