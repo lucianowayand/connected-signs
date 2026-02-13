@@ -117,7 +117,7 @@ public class JoinedSignRenderer extends SignRenderer {
         if (state.getBlock() instanceof WallSignBlock) {
             renderExtendedWallPanel(matrix, consumer, packedLight, packedOverlay, verticalLevels);
         } else {
-            renderExtendedStandingPanel(matrix, consumer, packedLight, packedOverlay);
+            renderExtendedStandingPanel(matrix, consumer, packedLight, packedOverlay, verticalLevels);
         }
     }
 
@@ -228,11 +228,12 @@ public class JoinedSignRenderer extends SignRenderer {
 
         float x1 = -width / 2;
         float x2 = width / 2;
-        float z1 = -depth / 2;
-        float z2 = depth / 2;
+        float z1 = -depth / 2 - 0.001f;  // Add offset to prevent z-fighting
+        float z2 = depth / 2 + 0.001f;   // Add offset to prevent z-fighting
 
-        // Position panel - for bottom sign (verticalLevels=0), stay contained; otherwise extend down
-        float y2 = baseHeight + 2/24f;  // Top of panel
+        // Position panel - adjust for standing sign coordinate system
+        // Standing signs have a -0.3125 Y offset in their transform, so use lower y2
+        float y2 = baseHeight + 19/48f;  // Top of panel
         float y1 = verticalLevels == 0 ? (y2 - baseHeight) : (y2 - height);  // Bottom: contained or extended
 
         // UV coordinates - repeat texture every 8 pixels (0.5 blocks = 1 sign height)
