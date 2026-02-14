@@ -70,7 +70,6 @@ minecraft {
     // Default run configurations; keep consistent with modern TF/Forge setups
     runs {
         all {
-            args '-mixin.config=' + mod_id + '.mixins.json'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', mod_id
 
@@ -125,6 +124,9 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
 
+    // Needed to generate the mixin refmap (required outside the dev environment).
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     def tfcEnabled = project.hasProperty('tfc_enabled') && project.property('tfc_enabled').toString().toBoolean()
     if (tfcEnabled) {
         compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.20.1-81-FORGE')
@@ -167,11 +169,18 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title': project.name,
                 'Implementation-Version': archiveVersion,
                 'Implementation-Vendor': project.property('mod_authors'),
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                // Required for mixins to load outside the dev run configs.
+                'MixinConfigs': "${mod_id}.mixins.json"
         )
     }
 
     finalizedBy 'reobfJar'
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
 }
 
 tasks.withType(JavaCompile).configureEach {

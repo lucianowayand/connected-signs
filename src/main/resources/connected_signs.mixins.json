@@ -2,15 +2,14 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.lucianowayand.connected_signs.mixin",
-  "plugin": "com.lucianowayand.connected_signs.mixin.ConnectedSignsMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "connected_signs.refmap.json",
   "mixins": [
-    "tfc.TFCStandingSignBlockMixin",
-    "tfc.client.TFCSignBlockEntityRendererMixin"
+    "StandingSignBlockMixin"
   ],
   "client": [
-    "client.AFCSignPanelDispatcherMixin"
+    "client.AFCSignPanelDispatcherMixin",
+    "client.TFCSignPanelDispatcherMixin"
   ],
   "server": [],
   "injectors": {

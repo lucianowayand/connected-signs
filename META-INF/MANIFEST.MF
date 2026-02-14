@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: connected_signs
+Specification-Vendor: lucianowayand
+Specification-Version: 1
+Implementation-Title: forge-1.20.1-47.4.10-mdk
+Implementation-Version: 1.0.0
+Implementation-Vendor: lucianowayand
+Implementation-Timestamp: 2026-02-14T02:09:24-0300
+MixinConfigs: connected_signs.mixins.json
+
