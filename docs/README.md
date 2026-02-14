@@ -1,4 +1,4 @@
-# Bigger Signs — Docs
+# Connected Signs — Docs
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
@@ -17,6 +17,12 @@ Run the development client from the project root:
 
 ```bash
 ./gradlew runClient
+```
+
+To run dev with optional TFC/AFC dependencies on the classpath:
+
+```bash
+./gradlew runClient -Ptfc_enabled=true
 ```
 
 Notes
