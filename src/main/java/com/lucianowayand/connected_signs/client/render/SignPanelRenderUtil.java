@@ -16,6 +16,10 @@ import org.joml.Matrix4f;
 public final class SignPanelRenderUtil {
 
     private static final String AFC_NAMESPACE = "afc";
+    private static final float HEIGHT_EPSILON = 0.001f;
+    private static final float THICKNESS_EPSILON = 2/24 + 0.001f;
+    // Higher = less "zoom" (more tiling). Lower = larger planks (more zoom).
+    private static final float UV_SCALE = 1.6f;
 
     private SignPanelRenderUtil() {
     }
@@ -166,20 +170,24 @@ public final class SignPanelRenderUtil {
         final float height = baseHeight * (verticalLevels + 1);
         final float thickness = 2 / 24f;
 
+        final float faceWidth = width;
+        final float faceHeight = height;
+
         final float x1 = -width / 2;
         final float x2 = width / 2;
 
-        final float y2 = baseHeight + 2 / 24f;
-        final float y1 = verticalLevels == 0 ? (y2 - baseHeight) : (y2 - height);
+        final float y2Base = baseHeight + 2 / 24f;
+        final float y1 = verticalLevels == 0 ? (y2Base - baseHeight) : (y2Base - height);
+        final float y2 = y2Base + HEIGHT_EPSILON;
 
         final float zOffset = 1 / 24f + 0.001f;
         final float zBack = zOffset - thickness;
         final float zFront = zOffset;
 
         final float uMin = 0.0f;
-        final float uMax = 1.0f;
+        final float uMax = faceWidth * UV_SCALE;
         final float vMin = 0.0f;
-        final float vMax = verticalLevels == 0 ? 1.0f : (height / baseHeight);
+        final float vMax = faceHeight * UV_SCALE;
 
         // Front (+Z)
         quad(consumer, matrix,
@@ -199,8 +207,9 @@ public final class SignPanelRenderUtil {
             packedOverlay, packedLight,
             0, 0, -1);
 
-        final float sideUMax = thickness;
-        final float sideVMax = verticalLevels == 0 ? 1.0f : (height / baseHeight);
+        final float sideUMax = thickness * UV_SCALE;
+        final float sideVMax = faceHeight * UV_SCALE;
+        final float topVMax = thickness * UV_SCALE;
 
         // Left (-X)
         quad(consumer, matrix,
@@ -223,18 +232,18 @@ public final class SignPanelRenderUtil {
         // Top (+Y)
         quad(consumer, matrix,
             x1, y2, zBack, 0, 0,
-            x2, y2, zBack, 1, 0,
-            x2, y2, zFront, 1, 1,
-            x1, y2, zFront, 0, 1,
+            x2, y2, zBack, faceWidth * UV_SCALE, 0,
+            x2, y2, zFront, faceWidth * UV_SCALE, topVMax,
+            x1, y2, zFront, 0, topVMax,
             packedOverlay, packedLight,
             0, 1, 0);
 
         // Bottom (-Y)
         quad(consumer, matrix,
             x1, y1, zFront, 0, 0,
-            x2, y1, zFront, 1, 0,
-            x2, y1, zBack, 1, 1,
-            x1, y1, zBack, 0, 1,
+            x2, y1, zFront, faceWidth * UV_SCALE, 0,
+            x2, y1, zBack, faceWidth * UV_SCALE, topVMax,
+            x1, y1, zBack, 0, topVMax,
             packedOverlay, packedLight,
             0, -1, 0);
     }
@@ -251,21 +260,27 @@ public final class SignPanelRenderUtil {
         final float baseHeight = 0.5f;
         final float height = baseHeight * (verticalLevels + 1);
 
+        final float faceWidth = width;
+        final float faceHeight = height;
+
         final float x1 = -width / 2;
         final float x2 = width / 2;
-        final float z1 = -depth / 2 - 0.001f;
-        final float z2 = depth / 2 + 0.001f;
+        final float zPad = THICKNESS_EPSILON * 2;
+        final float z1 = -depth / 2 - zPad;
+        final float z2 = depth / 2 + zPad;
 
-        final float y2 = baseHeight + 19 / 48f;
-        final float y1 = verticalLevels == 0 ? (y2 - baseHeight) : (y2 - height);
+        final float y2Base = baseHeight + 19 / 48f;
+        final float y1 = verticalLevels == 0 ? (y2Base - baseHeight) : (y2Base - height);
+        final float y2 = y2Base + HEIGHT_EPSILON;
 
         final float uMin = 0.0f;
-        final float uMax = 1.0f;
+        final float uMax = faceWidth * UV_SCALE;
         final float vMin = 0.0f;
-        final float vMax = verticalLevels == 0 ? 1.0f : (height / baseHeight);
+        final float vMax = faceHeight * UV_SCALE;
 
-        final float sideUMax = depth;
+        final float sideUMax = depth * UV_SCALE;
         final float sideVMax = vMax;
+        final float topVMax = depth * UV_SCALE;
 
         // Front (+Z)
         quad(consumer, matrix,
@@ -306,18 +321,18 @@ public final class SignPanelRenderUtil {
         // Top (+Y)
         quad(consumer, matrix,
             x1, y2, z1, 0, 0,
-            x2, y2, z1, 1, 0,
-            x2, y2, z2, 1, 1,
-            x1, y2, z2, 0, 1,
+            x2, y2, z1, faceWidth * UV_SCALE, 0,
+            x2, y2, z2, faceWidth * UV_SCALE, topVMax,
+            x1, y2, z2, 0, topVMax,
             packedOverlay, packedLight,
             0, 1, 0);
 
         // Bottom (-Y)
         quad(consumer, matrix,
             x1, y1, z2, 0, 0,
-            x2, y1, z2, 1, 0,
-            x2, y1, z1, 1, 1,
-            x1, y1, z1, 0, 1,
+            x2, y1, z2, faceWidth * UV_SCALE, 0,
+            x2, y1, z1, faceWidth * UV_SCALE, topVMax,
+            x1, y1, z1, 0, topVMax,
             packedOverlay, packedLight,
             0, -1, 0);
     }

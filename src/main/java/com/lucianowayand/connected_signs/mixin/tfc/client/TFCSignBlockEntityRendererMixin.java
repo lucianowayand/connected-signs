@@ -52,14 +52,11 @@ public abstract class TFCSignBlockEntityRendererMixin {
 
         connectedSigns.add(pos);
 
-        final BlockPos posBelow = pos.below();
-        final BlockPos posAbove = pos.above();
-        final boolean hasSignBelow = connectedSigns.contains(posBelow);
-        final boolean hasSignAbove = connectedSigns.contains(posAbove);
-
+        final boolean hasSignBelow = connectedSigns.contains(pos.below());
+        final boolean hasSignAbove = connectedSigns.contains(pos.above());
         if (!hasSignBelow && !hasSignAbove) return;
 
-        // Match current JoinedSignRenderer behavior: extend 1 extra sign height if there is a sign below.
+        // Extend only into the gap to the sign below.
         final int verticalLevels = hasSignBelow ? 1 : 0;
 
         poseStack.pushPose();

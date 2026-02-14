@@ -51,24 +51,18 @@ public class JoinedSignRenderer extends SignRenderer {
 
         connectedSigns.add(pos);
 
-        // Check if there's a sign directly below or above this one
-        BlockPos posBelow = pos.below();
-        BlockPos posAbove = pos.above();
-        boolean hasSignBelow = connectedSigns.contains(posBelow);
-        boolean hasSignAbove = connectedSigns.contains(posAbove);
-
-        // Render panel FIRST (so text appears on top)
-        // Render if part of a vertical stack (has sign above or below)
+        final boolean hasSignBelow = connectedSigns.contains(pos.below());
+        final boolean hasSignAbove = connectedSigns.contains(pos.above());
         if (hasSignBelow || hasSignAbove) {
             poseStack.pushPose();
 
-            // Apply sign transformations (rotation, positioning)
             SignPanelRenderUtil.applySignTransform(poseStack, state);
 
-            // Render extended wood panel
-            // If has sign below, extend down; otherwise just render contained panel
+            // If there is a sign below, extend just enough to cover the gap between signs.
+            // Otherwise render only this sign's panel.
+            final int verticalLevels = hasSignBelow ? 1 : 0;
             renderExtendedPanel(poseStack, bufferSource, packedLight, packedOverlay,
-                               signEntity, state, hasSignBelow ? 1 : 0);
+                               signEntity, state, verticalLevels);
 
             poseStack.popPose();
         }

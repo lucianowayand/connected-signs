@@ -7,10 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 
-/**
- * TFC 1.20.1 (Forge) inherits vanilla StandingSignBlock.canSurvive(), which requires a solid block below,
- * preventing sign stacking. This adds an override to allow standing signs to sit on other standing signs.
- */
 @Pseudo
 @Mixin(targets = "net.dries007.tfc.common.blocks.wood.TFCStandingSignBlock")
 public abstract class TFCStandingSignBlockMixin {

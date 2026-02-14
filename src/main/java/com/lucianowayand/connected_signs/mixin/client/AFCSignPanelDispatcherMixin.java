@@ -62,6 +62,7 @@ public abstract class AFCSignPanelDispatcherMixin {
         final boolean hasSignAbove = connectedSigns.contains(pos.above());
         if (!hasSignBelow && !hasSignAbove) return;
 
+        // Extend only into the gap to the sign below.
         final int verticalLevels = hasSignBelow ? 1 : 0;
 
         poseStack.pushPose();
