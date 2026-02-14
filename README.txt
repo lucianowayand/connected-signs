@@ -47,8 +47,8 @@ Forge Discord: https://discord.minecraftforge.net/
 
 ---
 
-Project: Bigger Signs
-- Mod id: bigger_signs
+Project: Connected Signs
+- Mod id: connected_signs
 - Author: lucianowayand
 - License: MIT (see LICENSE.txt)
 

@@ -1,4 +1,4 @@
-package com.lucianowayand.biggersigns.util;
+package com.lucianowayand.connected_signs.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +14,9 @@ import java.util.Set;
 public class SignConnectionHelper {
 
     /**
-     * Gets all signs connected to the given position (horizontally adjacent)
+    * Gets all signs connected to the given position.
+    *
+    * Note: This checks all 6 directions (including vertical) so stacked signs are considered connected.
      */
     public static Set<BlockPos> getConnectedSigns(Level level, BlockPos centerPos) {
         Set<BlockPos> connected = new HashSet<>();
@@ -62,9 +64,6 @@ public class SignConnectionHelper {
      * or both standing signs (regardless of rotation or wood type)
      */
     private static boolean areSignsCompatible(BlockState state1, BlockState state2) {
-        SignBlock block1 = (SignBlock) state1.getBlock();
-        SignBlock block2 = (SignBlock) state2.getBlock();
-
         boolean isWall1 = state1.hasProperty(net.minecraft.world.level.block.WallSignBlock.FACING);
         boolean isWall2 = state2.hasProperty(net.minecraft.world.level.block.WallSignBlock.FACING);
         boolean isStanding1 = state1.hasProperty(net.minecraft.world.level.block.StandingSignBlock.ROTATION);

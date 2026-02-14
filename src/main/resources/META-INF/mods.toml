@@ -18,11 +18,11 @@ license="MIT"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId="bigger_signs" #mandatory
+modId="connected_signs" #mandatory
 # The version number of the mod
 version="1.0.0" #mandatory
 # A display name for the mod
-displayName="Bigger Signs" #mandatory
+displayName="Connected Signs" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
@@ -42,10 +42,10 @@ authors="lucianowayand" #optional
 #displayTest="MATCH_VERSION" # if nothing is specified, MATCH_VERSION is the default when clientSideOnly=false, otherwise IGNORE_ALL_VERSION when clientSideOnly=true (#optional)
 
 # The description text for the mod (multi line!) (#mandatory)
-description='''Bigger Signs — visually connect adjacent signs into contiguous multiblock signs.
+description='''Connected Signs — visually connect adjacent signs into contiguous multiblock signs.
 Created by lucianowayand.'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.bigger_signs]] #optional
+[[dependencies.connected_signs]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -59,12 +59,34 @@ Created by lucianowayand.'''
     # Side this dependency is applied on - BOTH, CLIENT, or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.bigger_signs]]
+[[dependencies.connected_signs]]
     modId="minecraft"
     mandatory=true
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.20.1,1.21)"
     ordering="NONE"
+    side="BOTH"
+
+# Optional integrations
+[[dependencies.connected_signs]]
+    modId="tfc"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.connected_signs]]
+    modId="afc"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.connected_signs]]
+    modId="patchouli"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
     side="BOTH"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

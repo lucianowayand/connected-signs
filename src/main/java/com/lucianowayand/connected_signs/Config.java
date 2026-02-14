@@ -1,4 +1,4 @@
-package com.lucianowayand.biggersigns;
+package com.lucianowayand.connected_signs;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

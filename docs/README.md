@@ -2,14 +2,14 @@
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-- **Mod id:** `bigger_signs`
+- **Mod id:** `connected_signs`
 - **Author:** lucianowayand
 - **License:** MIT — see [LICENSE.txt](../LICENSE.txt)
 
 Quick links:
 
 - Ideas: [docs/SIGN_CONNECT_IDEAS.md](SIGN_CONNECT_IDEAS.md)
-- Mod entry: `src/main/java/com/lucianowayand/biggersigns/BiggerSignsMod.java`
+- Mod entry: `src/main/java/com/lucianowayand/connected_signs/ConnectedSignsMod.java`
 
 Development
 

@@ -1,6 +1,5 @@
-package com.lucianowayand.biggersigns.events;
+package com.lucianowayand.connected_signs.events;
 
-import com.lucianowayand.biggersigns.util.SignConnectionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -14,9 +13,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Set;
 
-public class SignEvents {
-    private static final int MAX_GROUP_SIZE = 256;
+import com.lucianowayand.connected_signs.util.SignConnectionHelper;
 
+public class SignEvents {
     @SubscribeEvent
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Level level = (Level) event.getLevel();
