@@ -7,9 +7,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Set;
 
@@ -21,12 +24,41 @@ public class SignEvents {
         Level level = (Level) event.getLevel();
         if (level.isClientSide()) return;
 
+        final ItemStack stack = event.getItemStack();
+        final String itemName = stack.isEmpty() ? "" : stack.getHoverName().getString().toLowerCase();
+        final boolean isShearsNamed = !itemName.isEmpty() && itemName.contains("shears");
+        if (!isShearsNamed) return;
+
         BlockPos start = event.getPos();
         BlockState startState = level.getBlockState(start);
         if (!(startState.getBlock() instanceof SignBlock)) return;
 
-        Set<BlockPos> group = SignConnectionHelper.getConnectedSigns(level, start);
-        group.add(start); // Include the starting sign itself
+        final Player player = event.getEntity();
+        final boolean wasDisconnected = SignConnectionHelper.isSignDisconnected(level, start);
+        final boolean nowDisconnected = !wasDisconnected;
+        SignConnectionHelper.setSignDisconnected(level, start, nowDisconnected);
+
+        if (nowDisconnected) {
+            // If this is a standing sign and it isn't the bottom sign in a vertical stack,
+            // break it (standing sign stacking is only possible for some mods, but this rule applies whenever it happens).
+            if (startState.getBlock() instanceof StandingSignBlock) {
+                final BlockState belowState = level.getBlockState(start.below());
+                if (belowState.getBlock() instanceof StandingSignBlock) {
+                    level.destroyBlock(start, true, player);
+                }
+            }
+
+            player.displayClientMessage(Component.literal("Sign disconnected"), true);
+        } else {
+            player.displayClientMessage(Component.literal("Sign connected"), true);
+        }
+
+        // Consume the interaction so vanilla sign editing / other interactions don't fire.
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        event.setUseBlock(Event.Result.DENY);
+        event.setUseItem(Event.Result.DENY);
+        return;
     }
 
     @SubscribeEvent

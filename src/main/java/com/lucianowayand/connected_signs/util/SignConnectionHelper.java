@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SignBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashSet;
@@ -12,6 +13,23 @@ import java.util.Queue;
 import java.util.Set;
 
 public class SignConnectionHelper {
+
+    private static final String DISCONNECTED_TAG = "connected_signs.disconnected";
+
+    public static boolean isSignDisconnected(final Level level, final BlockPos pos) {
+        final BlockEntity be = level.getBlockEntity(pos);
+        if (be == null) return false;
+        return be.getPersistentData().getBoolean(DISCONNECTED_TAG);
+    }
+
+    public static void setSignDisconnected(final Level level, final BlockPos pos, final boolean disconnected) {
+        final BlockEntity be = level.getBlockEntity(pos);
+        if (be == null) return;
+        be.getPersistentData().putBoolean(DISCONNECTED_TAG, disconnected);
+        be.setChanged();
+        final BlockState state = level.getBlockState(pos);
+        level.sendBlockUpdated(pos, state, state, 3);
+    }
 
     /**
     * Gets all signs connected to the given position.
@@ -25,6 +43,10 @@ public class SignConnectionHelper {
 
         BlockState centerState = level.getBlockState(centerPos);
         if (!(centerState.getBlock() instanceof SignBlock)) {
+            return connected;
+        }
+
+        if (isSignDisconnected(level, centerPos)) {
             return connected;
         }
 
@@ -47,6 +69,9 @@ public class SignConnectionHelper {
 
                 // Check if neighbor is a sign and has the same orientation
                 if (neighborState.getBlock() instanceof SignBlock) {
+                    if (isSignDisconnected(level, neighbor)) {
+                        continue;
+                    }
                     if (areSignsCompatible(centerState, neighborState)) {
                         connected.add(neighbor);
                         toCheck.add(neighbor);
